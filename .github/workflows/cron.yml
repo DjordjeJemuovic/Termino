@@ -17,7 +17,7 @@ jobs:
       - name: Call reminder endpoint
         env:
           CRON_BASE_URL: ${{ secrets.CRON_BASE_URL }}
-          CRON_SECRET: ${{QKyYeDAxMlQiRb3HWSAqaK2kuexYFf8Blw38KmEVq_Q}}
+          CRON_SECRET: ${QKyYeDAxMlQiRb3HWSAqaK2kuexYFf8Blw38KmEVq_Q}
         run: |
           node --input-type=module <<'NODE'
           const baseUrl = process.env.CRON_BASE_URL?.trim().replace(/\/$/, "");
