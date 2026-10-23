@@ -1,0 +1,54 @@
+name: Hourly appointment reminders
+
+on:
+  schedule:
+    - cron: "0 * * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: appointment-reminders
+  cancel-in-progress: false
+
+jobs:
+  reminders:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Call reminder endpoint
+        env:
+          CRON_BASE_URL: ${{ secrets.CRON_BASE_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          node --input-type=module <<'NODE'
+          const baseUrl = process.env.CRON_BASE_URL?.trim().replace(/\/$/, "");
+          const secret = process.env.CRON_SECRET;
+
+          if (!baseUrl || !secret) {
+            console.error("Missing CRON_BASE_URL or CRON_SECRET GitHub secret.");
+            process.exit(1);
+          }
+
+          let endpoint;
+          try {
+            endpoint = new URL(`${baseUrl}/api/cron/reminders`);
+          } catch {
+            console.error("CRON_BASE_URL must be a valid URL.");
+            process.exit(1);
+          }
+          if (endpoint.protocol !== "https:") {
+            console.error("CRON_BASE_URL must use HTTPS.");
+            process.exit(1);
+          }
+
+          const response = await fetch(endpoint, {
+            method: "GET",
+            headers: { Authorization: `Bearer ${secret}` },
+            signal: AbortSignal.timeout(120_000),
+          });
+          const body = await response.text();
+          if (!response.ok) {
+            console.error(`Reminder endpoint returned HTTP ${response.status}: ${body.slice(0, 1000)}`);
+            process.exit(1);
+          }
+          console.log(`Reminder endpoint succeeded (HTTP ${response.status}): ${body.slice(0, 1000)}`);
+          NODE
