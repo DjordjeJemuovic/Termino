@@ -22,13 +22,13 @@ function formatAppointmentDate(value: string, timezone: string) {
   return new Intl.DateTimeFormat("sr-Latn-RS", { timeZone: timezone, dateStyle: "full", hour: "2-digit", minute: "2-digit" }).format(new Date(value));
 }
 
-export async function sendAppointmentEmail(appointment: AppointmentEmailData, kind: "confirmation" | "reminder") {
+export async function sendAppointmentEmail(appointment: AppointmentEmailData) {
   const apiKey = process.env.RESEND_API_KEY;
   const from = process.env.EMAIL_FROM;
   if (!apiKey || !from) return false;
 
-  const title = kind === "reminder" ? `Podsetnik za termin - ${appointment.businessName}` : `Potvrda termina - ${appointment.businessName}`;
-  const intro = kind === "reminder" ? "Podsetnik: tvoj termin je za manje od 24 sata." : "Tvoj termin je potvrđen.";
+  const title = `Potvrda termina - ${appointment.businessName}`;
+  const intro = "Tvoj termin je potvrđen.";
   const manage = appointment.manageUrl
     ? `<p><a href="${escapeHtml(appointment.manageUrl)}">Pomeri ili otkaži termin</a></p>`
     : "";

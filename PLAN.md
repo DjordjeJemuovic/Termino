@@ -37,7 +37,7 @@ Cilj: multi-tenant aplikacija gde svaki salon/ordinacija ima svoju javnu stranic
 - Odsustva i praznici (po radniku ili za ceo salon) [Done]
 - Link za otkazivanje/pomeranje iz emaila (token, bez naloga klijenta) [Done]
 - Pravila: minimalno vreme unapred, maks dana unapred, rok za otkazivanje [Done]
-- Email potvrda + `.ics` prilog, podsetnik 24h ranije (Supabase cron / Vercel cron) [Done]
+- Email potvrda + `.ics` prilog [Done]
 - Lista klijenata sa istorijom termina i beleškama [Done]
 - Role: owner / admin / staff (staff vidi samo svoj kalendar) [Done]
 
@@ -94,7 +94,6 @@ termino/
 │   │   │   └── settings/page.tsx
 │   │   └── api/
 │   │       ├── slots/route.ts
-│   │       └── cron/reminders/route.ts
 │   ├── components/
 │   │   ├── ui/                             # shadcn
 │   │   ├── calendar/
@@ -131,7 +130,7 @@ termino/
 7. **Admin kalendar:** prikaz [Done], zatim drag/drop i resize
 8. **Email + ICS + link za otkazivanje**
 9. **Odsustva, role, klijenti**
-10. **Cron podsetnici, statistika**
+10. **Statistika**
 11. **Seed, demo režim, README sa GIF-om, deploy**
 
 ## Važne odluke

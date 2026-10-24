@@ -88,7 +88,7 @@ export async function createAdminAppointment(_previous: AdminActionState, formDa
       manageUrl: process.env.NEXT_PUBLIC_SITE_URL
         ? `${process.env.NEXT_PUBLIC_SITE_URL.replace(/\/$/, "")}/b/manage/${appointment.cancel_token}`
         : undefined,
-    }, "confirmation");
+    });
   }
   revalidatePath("/dashboard/calendar");
   return { success: true, message: "Termin je dodat u kalendar." };

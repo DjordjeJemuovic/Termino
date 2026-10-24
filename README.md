@@ -9,7 +9,7 @@ The application is built with Next.js and TypeScript, with Supabase providing au
 - **Public booking:** customers choose a service, a specific employee or “any available”, a date and time, then provide their contact details.
 - **Business dashboard:** manage the calendar, services, staff, working hours, time off, clients, team access, and booking rules.
 - **Reliable scheduling:** calculate availability in the business time zone and use a database constraint to prevent overlapping appointments.
-- **Customer communication:** send booking confirmations and reminders, attach calendar files, and provide secure links for managing appointments.
+- **Customer communication:** send booking confirmations, attach calendar files, and provide secure links for managing appointments.
 - **Product features:** analytics, a waitlist, an embeddable booking widget, demo data, keyboard shortcuts, dark mode, and localization.
 
 ## Development phases
@@ -34,7 +34,7 @@ The second phase added the workflows a business needs to manage real appointment
 - Employee and business-wide time off and holidays.
 - Customer links to cancel or reschedule without creating an account.
 - Booking rules for minimum advance notice, maximum booking horizon, and cancellation deadlines.
-- Confirmation emails with `.ics` calendar attachments and scheduled reminders roughly 24 hours before an appointment.
+- Confirmation emails with `.ics` calendar attachments.
 - Client history and notes, plus `owner`, `admin`, and `staff` roles. Staff accounts are restricted to their own calendar.
 
 ### Phase 3 — Polish and integrations
@@ -71,7 +71,6 @@ The core scheduling logic lives in `src/lib/scheduling/slots.ts`; time-zone help
 - `date-fns` and `date-fns-tz` for date and time-zone operations
 - Resend for transactional email delivery
 - Vitest for unit tests
-- Vercel Cron for scheduled reminders
 
 ## Getting started
 
@@ -110,13 +109,8 @@ The database must be set up in Supabase before the application can use it. Keep 
 | `NEXT_PUBLIC_SITE_URL` | Public base URL used to build links in emails |
 | `RESEND_API_KEY` | Resend API key for transactional email |
 | `EMAIL_FROM` | Verified sender address used by Resend |
-| `CRON_SECRET` | Secret used to authorize scheduled reminder requests |
 
 Email delivery requires a working Resend API key and a sender address verified with Resend. Without email configuration, customers can still use the confirmation page and appointment management link provided by the application.
-
-### Scheduled reminders
-
-`vercel.json` configures Vercel Cron to call `/api/cron/reminders` once per hour. Set `CRON_SECRET` in the deployment environment so the endpoint can authenticate scheduled requests. The reminder job selects appointments in the configured window before their start time and uses the business time zone when preparing the notification.
 
 ## Useful commands
 
@@ -152,7 +146,7 @@ src/
 ├── actions/                 # Server actions for business workflows
 ├── app/                     # Next.js routes, pages, and API endpoints
 │   ├── (auth)/               # Authentication and onboarding
-│   ├── api/                  # Availability and scheduled reminder endpoints
+│   ├── api/                  # Availability endpoints
 │   ├── b/                    # Public booking and appointment management
 │   ├── dashboard/            # Business administration pages
 │   └── embed/                # Embeddable booking page

@@ -96,7 +96,7 @@ export async function createPublicBooking(_previousState: BookingFormState, form
             endsAt: selectedSlot.serviceEndsAt,
             timezone: business.timezone,
             manageUrl,
-          }, "confirmation");
+          });
         }
         return { success: true, managePath, message: "Termin je uspesno zakazan. Radujemo se tvojoj poseti!" };
       }
@@ -161,7 +161,7 @@ export async function managePublicAppointment(_previous: ManageAppointmentState,
     manageUrl: process.env.NEXT_PUBLIC_SITE_URL
       ? `${process.env.NEXT_PUBLIC_SITE_URL.replace(/\/$/, "")}/b/manage/${parsed.data.token}`
       : undefined,
-  }, "confirmation");
+  });
   revalidatePath("/dashboard/calendar");
   return { success: true, message: "Termin je pomeren." };
 }
